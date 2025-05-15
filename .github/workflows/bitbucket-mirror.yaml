@@ -15,6 +15,6 @@ jobs:
     uses: aps831/workflows/.github/workflows/bitbucket-mirror.yaml@master
     with:
       username: aps831-github
-      repositoryname:
+      repositoryname: workflows-testbed-python
     secrets:
       BITBUCKET_SSH_PRIVATE_KEY: ${{ secrets.BITBUCKET_SSH_PRIVATE_KEY }}
