@@ -1,0 +1,69 @@
+---
+version: "3"
+tasks:
+  # tool-versions
+  tool-versions:upgrade:repo:
+    summary: Upgrade version in .tool-versions
+    desc: Upgrade version in .tool-versions
+    internal: true
+    silent: true
+    cmds:
+      - |
+        [[ "{{ .REPONAME }}" == "" ]] && REPONAME={{ .NAME }} || REPONAME={{ .REPONAME }}
+        version=$(gh api -H "Accept: application/vnd.github+json" repos/{{ .OWNER }}/$REPONAME/releases/latest | jq .tag_name -r)
+        version=${version//v}
+        sed -i "s/{{ .NAME }}.*/{{ .NAME }} $version/g" .tool-versions
+  tool-versions:upgrade:
+    summary: Upgrade versions in .tool-versions
+    desc: Upgrade versions in .tool-versions
+    cmds:
+      - task: tool-versions:upgrade:trivy
+      - task: tool-versions:upgrade:task
+  tool-versions:upgrade:trivy:
+    summary: Upgrade version of trivy in .tool-versions
+    desc: Upgrade version of trivy .tool-versions
+    cmds:
+      - task: tool-versions:upgrade:repo
+        vars:
+          OWNER: aquasecurity
+          NAME: trivy
+  tool-versions:upgrade:task:
+    summary: Upgrade version of task in .tool-versions
+    desc: Upgrade version of task .tool-versions
+    cmds:
+      - task: tool-versions:upgrade:repo
+        vars:
+          OWNER: go-task
+          NAME: task
+  # semgrep
+  semgrep:auto:
+    summary: Run semgrep static analysis with auto config
+    desc: Run semgrep static analysis with auto config
+    silent: true
+    cmds:
+      - semgrep --config=auto .
+  semgrep:security-audit:
+    summary: Run semgrep static analysis with security-audit config
+    desc: Run semgrep static analysis with security-audit config
+    silent: true
+    cmds:
+      - semgrep --config=p/security-audit .
+  semgrep:secrets:
+    summary: Run semgrep static analysis with secrets config
+    desc: Run semgrep static analysis with secrets config
+    silent: true
+    cmds:
+      - semgrep --config=p/secrets .
+  # trivy
+  trivy:fs:
+    summary: Run trivy fs check
+    desc: Run trivy fs check
+    silent: true
+    cmds:
+      - trivy fs .
+  trivy:config:
+    summary: Run trivy config check
+    desc: Run trivy config check
+    silent: true
+    cmds:
+      - trivy config .

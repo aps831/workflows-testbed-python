@@ -1,0 +1,35 @@
+version: 0.1
+cli:
+  version: 1.22.5
+plugins:
+  sources:
+    - id: trunk
+      ref: v1.6.2
+      uri: https://github.com/trunk-io/plugins
+lint:
+  disabled:
+    - terraform-validate
+  enabled:
+    - checkov@3.2.253
+    - trufflehog@3.82.1
+    - trivy@0.55.1
+    - yamllint@1.35.1
+    - actionlint@1.7.1
+    - git-diff-check
+    - gitleaks@8.18.4
+    - markdownlint@0.41.0
+    - prettier@3.3.3
+    - shellcheck@0.10.0
+    - shfmt@3.6.0
+runtimes:
+  enabled:
+    - python@3.10.8
+    - go@1.21.0
+    - node@18.12.1
+actions:
+  disabled:
+  enabled:
+    - trunk-announce
+    - trunk-check-pre-push
+    - trunk-fmt-pre-commit
+    - trunk-upgrade-available
