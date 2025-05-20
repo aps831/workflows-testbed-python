@@ -17,6 +17,22 @@ updates:
         update-types:
           - "minor"
           - "patch"
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    assignees:
+      - "aps831"
+    labels:
+      - "dependencies"
+      - "no_ci_cd_run"
+    commit-message:
+      prefix: "build"
+    groups:
+      patch-minor-dependencies:
+        update-types:
+          - "minor"
+          - "patch"
   - package-ecosystem: "pip"
     directory: "/"
     schedule:

@@ -1,0 +1,76 @@
+[tool.poetry]
+name = "workflows-testbed-python"
+version = "0.0.0"
+description = ""
+authors = ["Andrew Spratley"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.10"
+gunicorn = "^22.0.0"
+fastapi = "^0.115.12"
+uvicorn = "^0.34.2"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.0"
+pytest-cov = "^5.0.0"
+pip-audit = "^2.7.3"
+deptry = "^0.16.1"
+cyclonedx-bom = "^4.4.3"
+poethepoet = "^0.26.1"
+pg8000 = "^1.31.1"
+testcontainers = { extras = ["postgres"], version = "^4.10.0" }
+
+[tool.poetry.requires-plugins]
+poetry-plugin-export = "^1.9.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.deptry.per_rule_ignores]
+DEP002 = ["uvicorn"]
+
+[tool.poe.tasks.clean]
+cmd = "rm -rf outputs"
+
+[tool.poe.tasks.install]
+shell = """
+  poetry lock
+  poetry install
+"""
+
+[tool.poe.tasks.audit]
+shell = """
+  mkdir -p outputs/checks
+  bash -c 'poetry run pip-audit -r <(poetry export -f requirements.txt) 2>&1 | tee outputs/checks/audit.txt'
+"""
+
+[tool.poe.tasks.depcheck]
+shell = """
+  mkdir -p outputs/checks
+  poetry run deptry . 2>&1 | tee outputs/checks/depcheck.txt
+"""
+
+[tool.poe.tasks.sbom]
+shell = """
+  mkdir -p outputs/sbom
+  poetry run cyclonedx-py poetry > outputs/sbom/cyclonedx.json
+"""
+
+[tool.poe.tasks.unit]
+shell = """
+  mkdir -p outputs/unit-tests
+  mkdir -p outputs/coverage
+  poetry run pytest -m "not slow" --junit-xml=outputs/unit-tests/junit.xml --cov-report=html:outputs/coverage
+"""
+
+[tool.poe.tasks.integration]
+shell = """
+  mkdir -p outputs/integration-tests
+  poetry run pytest -m slow --junit-xml=outputs/integration-tests/junit.xml
+"""
+
+[tool.poe.tasks]
+build = ["clean", "install", "unit", "integration", "audit", "depcheck", "sbom"]

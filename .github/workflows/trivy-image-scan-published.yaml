@@ -1,0 +1,17 @@
+---
+name: Trivy Image Scan Published
+on:
+  registry_package:
+    types:
+      - published
+permissions:
+  packages: read
+jobs:
+  scan:
+    uses: aps831/workflows/.github/workflows/trivy-image-scan-published.yaml@master
+    with:
+      owner: ${{ github.repository_owner }}
+      name: ${{ github.event.registry_package.name }}
+      tag: ${{ github.event.registry_package.package_version.container_metadata.tag.name }}
+    secrets:
+      ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}

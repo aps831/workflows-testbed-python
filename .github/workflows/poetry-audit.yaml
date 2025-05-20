@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+---
+name: Poetry Audit
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 4 1 * *
+permissions:
+  contents: read
+jobs:
+  audit:
+    permissions:
+      contents: read
+      issues: read
+      pull-requests: read
+    uses: aps831/workflows/.github/workflows/poetry-audit.yaml@master
+    with:
+      python-version: 3.10.6
+      poetry-version: 2.1.2
+      working-directory: "."

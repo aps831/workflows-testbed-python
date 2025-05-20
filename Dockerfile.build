@@ -1,0 +1,21 @@
+FROM python:3.10-slim@sha256:dd9ccd42990116c1f31cb0cc649a1a9321c6afa110494e222887fdc8412d0e1f
+ARG BUILDKIT_SBOM_SCAN_CONTEXT=true
+ARG BUILDKIT_SBOM_SCAN_STAGE=true
+ARG USER_ID=1000
+ARG GROUP_ID=1000
+RUN groupadd -g "${GROUP_ID}" poetry && useradd --create-home --no-log-init -u "${USER_ID}" -g "${GROUP_ID}" poetry
+ENV POETRY_VERSION=2.1.2
+ENV PIPX_VERSION=1.7.1
+ENV POETRY_NO_INTERACTION=1
+ENV PYTHONFAULTHANDLER=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONHASHSEED=random \
+    PIP_DISABLE_PIP_VERSION_CHECK=on \
+    PIP_DEFAULT_TIMEOUT=100
+WORKDIR /app
+COPY entrypoint.sh .
+USER poetry
+ENV PATH="/home/poetry/.local/bin:$PATH"
+RUN python3 -m pip install --no-cache-dir --user "pipx==$PIPX_VERSION" \
+    && pipx install "poetry==$POETRY_VERSION"
+ENTRYPOINT ["/app/entrypoint.sh"]

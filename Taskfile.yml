@@ -1,6 +1,147 @@
 ---
 version: "3"
+env:
+  DOPPLER_PROJECT: development
+  DOPPLER_CONFIG: github
+  LOCAL_REGISTRY: registry.local:5000
+  IMAGE_BUILD: python:3.10-slim
+  IMAGE_FINAL: python:3.10-slim-bookworm
+  PROJECT: "workflows-testbed-python"
 tasks:
+  # test
+  test:unit:
+    summary: Run unit tests
+    desc: Run unit tests
+    silent: true
+    cmds:
+      - poetry run poe unit
+  test:integration:
+    summary: Run integration tests
+    desc: Run integration tests
+    silent: true
+    cmds:
+      - poetry run poe integration
+  # check
+  check:audit:
+    summary: Run audit
+    desc: Run audit
+    silent: true
+    cmds:
+      - poetry run poe audit
+  check:depcheck:
+    summary: Run dependency check
+    desc: Run dependency check
+    silent: true
+    cmds:
+      - poetry run poe depcheck
+  # build
+  tag:
+    summary: Generate build tag
+    desc: Generate build tag
+    silent: true
+    cmds:
+      - |
+        if [ -z "$(git status --porcelain)" ]; then
+          echo $(git rev-parse --short HEAD)
+        else
+          echo "dev-$(date +%s)"
+        fi
+  init:
+    summary: Init
+    desc: Init
+    silent: true
+    cmds:
+      - |
+        poetry install
+  build:
+    summary: Build
+    desc: Build
+    silent: true
+    cmds:
+      - |
+        poetry run poe build
+  run:
+    summary: Run
+    desc: Run
+    silent: true
+    cmds:
+      - |
+        poetry run python app/app.py
+  image:
+    summary: Build deployment images
+    desc: Build deployment images
+    silent: true
+    cmds:
+      - |
+        # Clean
+        rm -rf target && mkdir target
+
+        # Build Container
+        USER_ID=$(id -u)
+        GROUP_ID=$(getent group docker | cut -d: -f3)
+        docker build -f Dockerfile.build . --build-arg USER_ID=$USER_ID --build-arg GROUP_ID=$GROUP_ID --progress=plain --sbom=false --provenance=false --tag workflows-testbed-python-builder
+
+        # Build Artifact
+        docker run -v .:/app -v $HOME/.cache/pypoetry:/home/poetry/.cache/pypoetry -v /var/run/docker.sock:/var/run/docker.sock workflows-testbed-python-builder poetry run poe build
+
+        # Image
+        docker build -f Dockerfile.prod . --progress=plain --sbom=false --provenance=false --tag $LOCAL_REGISTRY/$PROJECT/workflows-testbed-python:{{ .TAG }}
+
+        # Push
+        docker tag $LOCAL_REGISTRY/$PROJECT/workflows-testbed-python:{{ .TAG }} $LOCAL_REGISTRY/$PROJECT/workflows-testbed-python:latest
+        docker push $LOCAL_REGISTRY/$PROJECT/workflows-testbed-python:{{ .TAG }}
+        docker push $LOCAL_REGISTRY/$PROJECT/workflows-testbed-python:latest
+
+        # Trivy
+        trivy image $LOCAL_REGISTRY/$PROJECT/workflows-testbed-python:{{ .TAG }}
+    vars:
+      TAG:
+        sh: task tag
+  # docker
+  docker:update:
+    summary: Update SHA for Docker image
+    desc: Update SHA for Docker image
+    silent: true
+    internal: true
+    cmds:
+      - |
+        SHA=$(docker manifest inspect --verbose {{ .IMAGE }} | \
+          jq -r 'if type=="object"
+            then .Descriptor.digest
+            else .[] | select(.Descriptor.platform.architecture=="amd64" and .Descriptor.platform.os=="linux") | .Descriptor.digest
+            end')
+        sed -i -E "s|(FROM {{ .IMAGE }}@)sha256:[a-zA-Z0-9]{64}( AS .*)?|\1$SHA\2|" {{ .DOCKERFILE }}
+  docker:update:build:
+    summary: Update SHA for build Docker image
+    desc: Update SHA for build Docker image
+    silent: true
+    cmds:
+      - task: docker:update
+        vars:
+          IMAGE: $IMAGE_BUILD
+          DOCKERFILE: Dockerfile
+  docker:update:final:
+    summary: Update SHA for final Docker image
+    desc: Update SHA for final Docker image
+    silent: true
+    cmds:
+      - task: docker:update
+        vars:
+          IMAGE: $IMAGE_FINAL
+          DOCKERFILE: Dockerfile
+  # cosign
+  cosign:
+    summary: Create and set cosign password and keys
+    desc: Create and set cosign password and keys
+    silent: true
+    cmds:
+      - |
+        export COSIGN_PASSWORD=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+        echo $COSIGN_PASSWORD | gh secret set COSIGN_PASSWORD
+        NAME_WITH_OWNER=$(gh repo view --json="nameWithOwner" --jq=".nameWithOwner")
+        export GITHUB_TOKEN=$(doppler secrets get GITHUB_TOKEN_REPO_ADMIN_PUBLIC_KEY --plain)
+        cosign generate-key-pair github://$NAME_WITH_OWNER
+        rm cosign.pub
   # tool-versions
   tool-versions:upgrade:repo:
     summary: Upgrade version in .tool-versions

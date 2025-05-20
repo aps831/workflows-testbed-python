@@ -1,0 +1,109 @@
+[
+  {
+    "description": "Python Version",
+    "value": "3.10",
+    "files": [
+      {
+        "filePath": "Dockerfile.build",
+        "valuePath": ".FROM[0]",
+        "valuePrefix": "python:",
+        "valueSuffix": "-slim@",
+        "partialMatch": true
+      },
+      {
+        "filePath": "Dockerfile.prod",
+        "valuePath": ".FROM[0]",
+        "valuePrefix": "python:",
+        "valueSuffix": "-slim-bookworm@",
+        "partialMatch": true
+      },
+      {
+        "filePath": ".tool-versions",
+        "valuePath": "python",
+        "valueSuffix": ".6"
+      },
+      {
+        "filePath": "pyproject.toml",
+        "valuePath": ".tool.poetry.dependencies.python",
+        "valuePrefix": "^"
+      },
+      {
+        "filePath": "Taskfile.yml",
+        "valuePath": ".env.IMAGE_BUILD",
+        "valuePrefix": "python:",
+        "valueSuffix": "-slim"
+      },
+      {
+        "filePath": "Taskfile.yml",
+        "valuePath": ".env.IMAGE_FINAL",
+        "valuePrefix": "python:",
+        "valueSuffix": "-slim-bookworm"
+      },
+      {
+        "filePath": ".github/workflows/trunk.yaml",
+        "valuePath": ".jobs.check.with.python-version",
+        "valueSuffix": ".6"
+      },
+      {
+        "filePath": ".github/workflows/poetry-audit.yaml",
+        "valuePath": ".jobs.audit.with.python-version",
+        "valueSuffix": ".6"
+      }
+    ]
+  },
+  {
+    "description": "Poetry Version",
+    "value": "2.1.2",
+    "files": [
+      {
+        "filePath": "Dockerfile.build",
+        "valuePath": ".ENV[0]",
+        "valuePrefix": "POETRY_VERSION="
+      },
+      {
+        "filePath": ".tool-versions",
+        "valuePath": "poetry"
+      },
+      {
+        "filePath": ".github/workflows/trunk.yaml",
+        "valuePath": ".jobs.check.with.poetry-version"
+      },
+      {
+        "filePath": ".github/workflows/poetry-audit.yaml",
+        "valuePath": ".jobs.audit.with.poetry-version"
+      }
+    ]
+  },
+  {
+    "description": "Python Build Image",
+    "value": "python:3.10-slim",
+    "files": [
+      {
+        "filePath": "Taskfile.yml",
+        "valuePath": ".env.IMAGE_BUILD"
+      },
+      {
+        "filePath": "Dockerfile.build",
+        "valuePath": ".FROM[0]",
+        "valueSuffix": "@",
+        "partialMatch": true
+      }
+    ]
+  },
+  {
+    "description": "Python Runtime Docker Image",
+    "value": "python:3.10-slim-bookworm",
+    "files": [
+      {
+        "filePath": "Taskfile.yml",
+        "valuePath": ".env.IMAGE_FINAL"
+      },
+      {
+        "filePath": "Dockerfile.prod",
+        "valuePath": ".FROM[0]",
+        "valueSuffix": "@",
+        "partialMatch": true
+      }
+    ]
+  }
+]

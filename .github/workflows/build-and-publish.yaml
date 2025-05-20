@@ -1,0 +1,27 @@
+---
+name: Build and Publish Package
+on:
+  push:
+    branches:
+      - "master"
+      - "prerelease"
+permissions:
+  contents: write
+  packages: write
+  issues: write
+  pull-requests: write
+jobs:
+  build:
+    uses: aps831/workflows/.github/workflows/build-and-publish-poetry-docker-image-artifact-v2.yaml@feat/docker
+    with:
+      image-name: "workflows-testbed-python"
+      dockerfile-build: "Dockerfile.build"
+      dockerfile-prod: "Dockerfile.prod"
+      volumes: |
+        .:/app
+      build-command: poetry run poe build
+      templated-files: README.tpl.md
+    secrets:
+      ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }} # GITHUB_TOKEN will not fire 'release' and 'registry_package' events
+      COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+      COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
