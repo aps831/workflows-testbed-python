@@ -48,6 +48,11 @@
         "filePath": ".github/workflows/poetry-audit.yaml",
         "valuePath": ".jobs.audit.with.python-version",
         "valueSuffix": ".6"
+      },
+      {
+        "filePath": ".github/workflows/build-and-publish.yaml",
+        "valuePath": ".jobs.build.with.python-version",
+        "valueSuffix": ".6"
       }
     ]
   },
@@ -71,6 +76,10 @@
       {
         "filePath": ".github/workflows/poetry-audit.yaml",
         "valuePath": ".jobs.audit.with.poetry-version"
+      },
+      {
+        "filePath": ".github/workflows/build-and-publish.yaml",
+        "valuePath": ".jobs.build.with.poetry-version"
       }
     ]
   },

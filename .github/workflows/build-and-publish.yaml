@@ -21,6 +21,8 @@ jobs:
         .:/app
       build-command: poetry run poe build
       templated-files: README.tpl.md
+      python-version: 3.10.6
+      poetry-version: 2.1.2
     secrets:
       ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }} # GITHUB_TOKEN will not fire 'release' and 'registry_package' events
       COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
