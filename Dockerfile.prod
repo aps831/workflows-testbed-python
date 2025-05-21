@@ -1,5 +1,5 @@
 FROM python:3.13-slim-bookworm@sha256:fac773db136dc036c6352d7c0fc70f8d9fab78399aac6a282064d1cf581fde3b
-LABEL org.opencontainers.image.source=https://github.com/aps831/htmx-thymeleaf-jersey-jetty-test
+LABEL org.opencontainers.image.source=https://github.com/aps831/workflows-testbed-python
 HEALTHCHECK NONE
 ARG BUILDKIT_SBOM_SCAN_CONTEXT=true
 ARG BUILDKIT_SBOM_SCAN_STAGE=true
