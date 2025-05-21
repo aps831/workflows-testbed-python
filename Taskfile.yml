@@ -14,26 +14,26 @@ tasks:
     desc: Run unit tests
     silent: true
     cmds:
-      - poetry run poe unit
+      - poetry poe unit
   test:integration:
     summary: Run integration tests
     desc: Run integration tests
     silent: true
     cmds:
-      - poetry run poe integration
+      - poetry poe integration
   # check
   check:audit:
     summary: Run audit
     desc: Run audit
     silent: true
     cmds:
-      - poetry run poe audit
+      - poetry poe audit
   check:depcheck:
     summary: Run dependency check
     desc: Run dependency check
     silent: true
     cmds:
-      - poetry run poe depcheck
+      - poetry poe depcheck
   # build
   tag:
     summary: Generate build tag
@@ -59,7 +59,7 @@ tasks:
     silent: true
     cmds:
       - |
-        poetry run poe build
+        poetry poe build
   run:
     summary: Run
     desc: Run
@@ -82,7 +82,7 @@ tasks:
         docker build -f Dockerfile.build . --build-arg USER_ID=$USER_ID --build-arg GROUP_ID=$GROUP_ID --progress=plain --sbom=false --provenance=false --tag workflows-testbed-python-builder
 
         # Build Artifact
-        docker run -v .:/app -v $HOME/.cache/pypoetry:/home/poetry/.cache/pypoetry -v /var/run/docker.sock:/var/run/docker.sock workflows-testbed-python-builder poetry run poe build
+        docker run -v .:/app -v $HOME/.cache/pypoetry:/home/poetry/.cache/pypoetry -v /var/run/docker.sock:/var/run/docker.sock workflows-testbed-python-builder poetry poe build
 
         # Image
         docker build -f Dockerfile.prod . --progress=plain --sbom=false --provenance=false --tag $LOCAL_REGISTRY/$PROJECT/workflows-testbed-python:{{ .TAG }}

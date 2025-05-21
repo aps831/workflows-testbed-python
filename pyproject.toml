@@ -24,6 +24,7 @@ testcontainers = { extras = ["postgres"], version = "^4.10.0" }
 
 [tool.poetry.requires-plugins]
 poetry-plugin-export = "^1.9.0"
+poethepoet = { version = "~0.34.0", extras = ["poetry_plugin"]}
 
 [build-system]
 requires = ["poetry-core"]
