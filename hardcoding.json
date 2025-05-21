@@ -1,7 +1,7 @@
 [
   {
     "description": "Python Version",
-    "value": "3.10",
+    "value": "3.13",
     "files": [
       {
         "filePath": "Dockerfile.build",
@@ -20,7 +20,7 @@
       {
         "filePath": ".tool-versions",
         "valuePath": "python",
-        "valueSuffix": ".6"
+        "valueSuffix": ".3"
       },
       {
         "filePath": "pyproject.toml",
@@ -42,17 +42,17 @@
       {
         "filePath": ".github/workflows/trunk.yaml",
         "valuePath": ".jobs.check.with.python-version",
-        "valueSuffix": ".6"
+        "valueSuffix": ".3"
       },
       {
         "filePath": ".github/workflows/poetry-audit.yaml",
         "valuePath": ".jobs.audit.with.python-version",
-        "valueSuffix": ".6"
+        "valueSuffix": ".3"
       },
       {
         "filePath": ".github/workflows/build-and-publish.yaml",
         "valuePath": ".jobs.build.with.python-version",
-        "valueSuffix": ".6"
+        "valueSuffix": ".3"
       }
     ]
   },
@@ -85,7 +85,7 @@
   },
   {
     "description": "Python Build Image",
-    "value": "python:3.10-slim",
+    "value": "python:3.13-slim",
     "files": [
       {
         "filePath": "Taskfile.yml",
@@ -101,7 +101,7 @@
   },
   {
     "description": "Python Runtime Docker Image",
-    "value": "python:3.10-slim-bookworm",
+    "value": "python:3.13-slim-bookworm",
     "files": [
       {
         "filePath": "Taskfile.yml",

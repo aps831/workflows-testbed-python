@@ -4,8 +4,8 @@ env:
   DOPPLER_PROJECT: development
   DOPPLER_CONFIG: github
   LOCAL_REGISTRY: registry.local:5000
-  IMAGE_BUILD: python:3.10-slim
-  IMAGE_FINAL: python:3.10-slim-bookworm
+  IMAGE_BUILD: python:3.13-slim
+  IMAGE_FINAL: python:3.13-slim-bookworm
   PROJECT: "workflows-testbed-python"
 tasks:
   # test

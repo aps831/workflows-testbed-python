@@ -1,4 +1,4 @@
-python 3.10.6
+python 3.13.3
 poetry 2.1.2
 trivy 0.62.1
 task 3.43.3
