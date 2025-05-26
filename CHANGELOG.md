@@ -4,11 +4,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.0] - 2025-05-26
+
+### Features
+
+- Test ci
+
 ## [0.4.0] - 2025-05-26
 
 ### Features
 
 - Test ci
+
+### Miscellaneous Tasks
+
+- Update for v0.4.0 release [skip ci]
 
 ## [0.3.0] - 2025-05-22
 
