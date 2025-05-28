@@ -20,6 +20,7 @@ deptry = "^0.16.1"
 cyclonedx-bom = "^4.4.3"
 pg8000 = "^1.31.1"
 testcontainers = { extras = ["postgres"], version = "^4.10.0" }
+httpx = "^0.28.1"
 
 [tool.poetry.requires-plugins]
 poetry-plugin-export = "^1.9.0"
@@ -63,13 +64,19 @@ shell = """
 shell = """
   mkdir -p outputs/unit-tests
   mkdir -p outputs/coverage
-  poetry run pytest -m "not slow" --junit-xml=outputs/unit-tests/junit.xml --cov-report=html:outputs/coverage
+  poetry run pytest -m fast --junit-xml=outputs/unit-tests/junit.xml --cov-report=html:outputs/coverage
 """
 
 [tool.poe.tasks.integration]
 shell = """
   mkdir -p outputs/integration-tests
   poetry run pytest -m slow --junit-xml=outputs/integration-tests/junit.xml
+"""
+
+[tool.poe.tasks.e2e]
+shell = """
+  mkdir -p outputs/e2e-tests
+  poetry run pytest -m e2e --junit-xml=outputs/e2e-tests/junit.xml
 """
 
 [tool.poe.tasks]

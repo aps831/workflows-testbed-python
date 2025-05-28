@@ -21,6 +21,12 @@ tasks:
     silent: true
     cmds:
       - poetry poe integration
+  test:e2e:
+    summary: Run integration tests
+    desc: Run integration tests
+    silent: true
+    cmds:
+      - poetry poe e2e
   # check
   check:audit:
     summary: Run audit
@@ -85,12 +91,17 @@ tasks:
         docker run -v .:/app -v $HOME/.cache/pypoetry:/home/poetry/.cache/pypoetry -v /var/run/docker.sock:/var/run/docker.sock workflows-testbed-python-builder poetry poe build
 
         # Image
-        docker build -f Dockerfile.prod . --progress=plain --sbom=false --provenance=false --tag $LOCAL_REGISTRY/$PROJECT/workflows-testbed-python:{{ .TAG }}
+        IMAGE_NAME_TAG=$LOCAL_REGISTRY/$PROJECT/testbed-python:{{ .TAG }}
+        IMAGE_NAME_LATEST=$LOCAL_REGISTRY/$PROJECT/testbed-python:latest
+        docker build -f Dockerfile.prod . --progress=plain --sbom=false --provenance=false --tag $IMAGE_NAME_TAG
+        docker image tag $IMAGE_NAME_TAG $IMAGE_NAME_LATEST
 
         # Push
-        docker tag $LOCAL_REGISTRY/$PROJECT/workflows-testbed-python:{{ .TAG }} $LOCAL_REGISTRY/$PROJECT/workflows-testbed-python:latest
-        docker push $LOCAL_REGISTRY/$PROJECT/workflows-testbed-python:{{ .TAG }}
-        docker push $LOCAL_REGISTRY/$PROJECT/workflows-testbed-python:latest
+        docker push $IMAGE_NAME_TAG
+        docker push $IMAGE_NAME_LATEST
+
+        # Test
+        docker run -v .:/app -v $HOME/.cache/pypoetry:/home/poetry/.cache/pypoetry -v /var/run/docker.sock:/var/run/docker.sock --env GITHUB_USER_REF --env GITHUB_TOKEN_REF --env IMAGE_UNDER_TEST_NAME=$IMAGE_NAME_TAG workflows-testbed-python-builder poetry poe e2e
 
         # Trivy
         trivy image $LOCAL_REGISTRY/$PROJECT/workflows-testbed-python:{{ .TAG }}

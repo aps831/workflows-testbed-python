@@ -12,7 +12,7 @@ permissions:
   pull-requests: write
 jobs:
   build:
-    uses: aps831/workflows/.github/workflows/build-and-publish-poetry-docker-image-artifact-v2.yaml@master
+    uses: aps831/workflows/.github/workflows/build-and-publish-poetry-docker-image-artifact-v2.yaml@feat/e2e-tests
     with:
       image-name: "workflows-testbed-python"
       dockerfile-build: "Dockerfile.build"
@@ -20,6 +20,7 @@ jobs:
       volumes: |
         .:/app
       build-command: poetry poe build
+      test-command: poetry poe e2e
       templated-files: README.tpl.md
       python-version: 3.13.3
       poetry-version: 2.1.2
