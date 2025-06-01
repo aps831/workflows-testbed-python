@@ -4,6 +4,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.12.0] - 2025-06-01
+
+### Features
+
+- Test ci
+
 ## [0.11.0] - 2025-06-01
 
 ### Features
@@ -18,6 +24,7 @@ All notable changes to this project will be documented in this file.
 ### Miscellaneous Tasks
 
 - Set branch to master [skip ci]
+- Update for v0.11.0 release [skip ci]
 
 ## [0.6.0] - 2025-05-26
 
