@@ -4,11 +4,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.9.0] - 2025-06-01
+
+### Features
+
+- Add e2e test
+- Test ci
+- Test ci
+- Test ci
+
+### Miscellaneous Tasks
+
+- Set branch to master [skip ci]
+
 ## [0.6.0] - 2025-05-26
 
 ### Features
 
 - Test ci
+
+### Miscellaneous Tasks
+
+- Update for v0.6.0 release [skip ci]
 
 ## [0.5.0] - 2025-05-26
 
