@@ -1,7 +1,6 @@
 import os
 import pytest
 import httpx
-import time
 from testcontainers.core.container import DockerContainer
 from testcontainers.core.waiting_utils import wait_for_logs
 
