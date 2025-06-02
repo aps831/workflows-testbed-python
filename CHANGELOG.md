@@ -4,11 +4,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.13.0] - 2025-06-02
+
+### Features
+
+- Test blank test command
+
 ## [0.12.0] - 2025-06-01
 
 ### Features
 
 - Test ci
+
+### Miscellaneous Tasks
+
+- Update for v0.12.0 release [skip ci]
 
 ## [0.11.0] - 2025-06-01
 
