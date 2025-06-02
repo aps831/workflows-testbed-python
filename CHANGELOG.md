@@ -4,11 +4,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.16.0] - 2025-06-02
+
+### Features
+
+- Test blank build command
+
 ## [0.15.0] - 2025-06-02
 
 ### Features
 
 - Reinstate test command
+
+### Miscellaneous Tasks
+
+- Update for v0.15.0 release [skip ci]
 
 ## [0.14.0] - 2025-06-02
 
