@@ -22,7 +22,7 @@ jobs:
       volumes: |
         .:/app
       # build-command: poetry poe build
-      build-command: ""
+      build-command: "None"
       test-command: poetry poe e2e
       templated-files: README.tpl.md
       python-version: 3.13.3
