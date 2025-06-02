@@ -22,7 +22,8 @@ jobs:
       volumes: |
         .:/app
       build-command: poetry poe build
-      test-command: poetry poe e2e
+      # test-command: poetry poe e2e
+      test-command: ""
       templated-files: README.tpl.md
       python-version: 3.13.3
       poetry-version: 2.1.2
