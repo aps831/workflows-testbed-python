@@ -85,10 +85,11 @@ tasks:
         # Build Container
         USER_ID=$(id -u)
         GROUP_ID=$(getent group docker | cut -d: -f3)
-        docker build -f Dockerfile.build . --build-arg USER_ID=$USER_ID --build-arg GROUP_ID=$GROUP_ID --progress=plain --sbom=false --provenance=false --tag workflows-testbed-python-builder
+        IMAGE_NAME_BUILDER=workflows-testbed-python-builder
+        docker build -f Dockerfile.build . --build-arg USER_ID=$USER_ID --build-arg GROUP_ID=$GROUP_ID --progress=plain --sbom=false --provenance=false --tag $IMAGE_NAME_BUILDER
 
         # Build Artifact
-        docker run -v .:/app -v $HOME/.cache/pypoetry:/home/poetry/.cache/pypoetry -v /var/run/docker.sock:/var/run/docker.sock workflows-testbed-python-builder poetry poe build
+        docker run -v .:/app -v $HOME/.cache/pypoetry:/home/poetry/.cache/pypoetry -v /var/run/docker.sock:/var/run/docker.sock $IMAGE_NAME_BUILDER poetry poe build
 
         # Image
         IMAGE_NAME_TAG=$LOCAL_REGISTRY/$PROJECT/testbed-python:{{ .TAG }}
@@ -101,7 +102,7 @@ tasks:
         docker push $IMAGE_NAME_LATEST
 
         # Test
-        docker run -v .:/app -v $HOME/.cache/pypoetry:/home/poetry/.cache/pypoetry -v /var/run/docker.sock:/var/run/docker.sock --env GITHUB_USER_REF --env GITHUB_TOKEN_REF --env IMAGE_UNDER_TEST_NAME=$IMAGE_NAME_TAG workflows-testbed-python-builder poetry poe e2e
+        docker run -v .:/app -v $HOME/.cache/pypoetry:/home/poetry/.cache/pypoetry -v /var/run/docker.sock:/var/run/docker.sock --env IMAGE_UNDER_TEST_NAME=$IMAGE_NAME_TAG $IMAGE_NAME_BUILDER poetry poe e2e
 
         # Trivy
         trivy image $IMAGE_NAME_TAG
