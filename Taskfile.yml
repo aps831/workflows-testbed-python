@@ -104,7 +104,7 @@ tasks:
         docker run -v .:/app -v $HOME/.cache/pypoetry:/home/poetry/.cache/pypoetry -v /var/run/docker.sock:/var/run/docker.sock --env GITHUB_USER_REF --env GITHUB_TOKEN_REF --env IMAGE_UNDER_TEST_NAME=$IMAGE_NAME_TAG workflows-testbed-python-builder poetry poe e2e
 
         # Trivy
-        trivy image $LOCAL_REGISTRY/$PROJECT/workflows-testbed-python:{{ .TAG }}
+        trivy image $IMAGE_NAME_TAG
     vars:
       TAG:
         sh: task tag
