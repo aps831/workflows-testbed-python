@@ -102,7 +102,7 @@ tasks:
         docker push $IMAGE_NAME_LATEST
 
         # Test
-        docker run -v .:/app -v $HOME/.cache/pypoetry:/home/poetry/.cache/pypoetry -v /var/run/docker.sock:/var/run/docker.sock --env IMAGE_UNDER_TEST_NAME=$IMAGE_NAME_TAG $IMAGE_NAME_BUILDER poetry poe e2e
+        docker run -v .:/app -v /tmp:/tmp -v $HOME/.cache/pypoetry:/home/poetry/.cache/pypoetry -v /var/run/docker.sock:/var/run/docker.sock --env IMAGE_UNDER_TEST_NAME=$IMAGE_NAME_TAG $IMAGE_NAME_BUILDER poetry poe e2e
 
         # Trivy
         trivy image $IMAGE_NAME_TAG
