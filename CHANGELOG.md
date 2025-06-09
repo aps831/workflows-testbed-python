@@ -4,11 +4,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.20.0] - 2025-06-09
+
+### Features
+
+- Reinstate build command [skip ci]
+- Tidy up image task [skip ci]
+- Add tmp volume when running e2e tests
+
+### Miscellaneous Tasks
+
+- Use variable for image name when scanning with trivy [skip ci]
+
 ## [0.19.0] - 2025-06-02
 
 ### Features
 
 - Test exit status
+
+### Miscellaneous Tasks
+
+- Update for v0.19.0 release [skip ci]
 
 ## [0.18.0] - 2025-06-02
 
