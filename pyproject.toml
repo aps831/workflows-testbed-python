@@ -18,7 +18,7 @@ pytest-cov = "^5.0.0"
 pip-audit = "^2.7.3"
 deptry = "^0.16.1"
 cyclonedx-bom = "^4.4.3"
-pg8000 = "^1.31.1"
+pg8000 = "^1.31.5"
 testcontainers = { extras = ["postgres"], version = "^4.10.0" }
 httpx = "^0.28.1"
 
