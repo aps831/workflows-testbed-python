@@ -16,10 +16,10 @@ uvicorn = "^0.34.2"
 pytest = "^8.2.0"
 pytest-cov = "^5.0.0"
 pip-audit = "^2.7.3"
-deptry = "^0.16.1"
+deptry = "^0.24.0"
 cyclonedx-bom = "^4.4.3"
-pg8000 = "^1.31.1"
-testcontainers = { extras = ["postgres"], version = "^4.10.0" }
+pg8000 = "^1.31.5"
+testcontainers = { extras = ["postgres"], version = "^4.13.2" }
 httpx = "^0.28.1"
 
 [tool.poetry.requires-plugins]
