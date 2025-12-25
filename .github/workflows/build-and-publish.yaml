@@ -19,8 +19,6 @@ jobs:
       image-name: "workflows-testbed-python"
       dockerfile-build: "Dockerfile.build"
       dockerfile-prod: "Dockerfile.prod"
-      volumes: |
-        .:/app
       build-command: poetry poe build
       test-command: poetry poe e2e
       templated-files: README.tpl.md

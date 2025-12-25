@@ -12,10 +12,9 @@ ENV PYTHONFAULTHANDLER=1 \
     PYTHONHASHSEED=random \
     PIP_DISABLE_PIP_VERSION_CHECK=on \
     PIP_DEFAULT_TIMEOUT=100
-WORKDIR /app
-COPY entrypoint.sh .
+COPY entrypoint.sh /
 USER poetry
 ENV PATH="/home/poetry/.local/bin:$PATH"
-RUN python3 -m pip install --no-cache-dir --user "pipx==$PIPX_VERSION" \
-    && pipx install "poetry==$POETRY_VERSION"
-ENTRYPOINT ["/app/entrypoint.sh"]
+RUN python3 -m pip install --no-cache-dir --user "pipx==$PIPX_VERSION" &&\
+    pipx install "poetry==$POETRY_VERSION"
+ENTRYPOINT ["/entrypoint.sh"]
